@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.squashtest.hibernatekata.jpa.dto.FilmDto;
+import org.squashtest.hibernatekata.jpa.dto.FilmProjection;
 import org.squashtest.hibernatekata.jpa.entities.Film;
+import org.squashtest.hibernatekata.jpa.repository.FilmRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,6 +29,9 @@ public class ProjectionTest {
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
+
+    @Autowired
+    FilmRepository filmRepository;
 
     // Witch columns are fetched ? Why ?
     @Test
@@ -53,4 +58,13 @@ public class ProjectionTest {
     }
 
 
+    // Witch columns are fetched ? Why ?
+    @Test
+    public void projectOneEntityWithSpringData() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        FilmProjection filmProjection = this.filmRepository.findFilmProjectionById(1).get();
+        assertEquals(1, filmProjection.getId());
+        assertEquals("ACADEMY DINOSAUR", filmProjection.getTitle());
+        LOGGER.info("---------- END TEST -----------");
+    }
 }

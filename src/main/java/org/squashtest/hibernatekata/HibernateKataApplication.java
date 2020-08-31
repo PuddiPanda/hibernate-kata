@@ -17,8 +17,6 @@ public class HibernateKataApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(HibernateKataApplication.class, args);
-		EntityManagerFactory emf = context.getBean(EntityManagerFactory.class);
-		Set<ManagedType<?>> managedTypes = emf.getMetamodel().getManagedTypes();
 	}
 
 }

@@ -106,4 +106,28 @@ public class SimpleModificationTest {
         Session session = entityManager.unwrap(Session.class);
         session.getFlushMode();
     }
+
+    // Simple fetch time
+    @Test
+    public void dirtyCheckingWithOneEntity() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        Film film = entityManager.find(Film.class, 1);
+        assertEquals("ACADEMY DINOSAUR", film.getTitle());
+        film.setTitle("WIZARD ACADEMY");
+        entityManager.flush();
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // more entity at fetch time
+    @Test
+    public void dirtyCheckingIsReallyExpensive() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        entityManager.createQuery("select a from Actor a").getResultList();
+        entityManager.createQuery("select f from Film f").getResultList();
+        Film film = entityManager.find(Film.class, 1);
+        assertEquals("ACADEMY DINOSAUR", film.getTitle());
+        film.setTitle("WIZARD ACADEMY");
+        entityManager.flush();
+        LOGGER.info("---------- END TEST -----------");
+    }
 }

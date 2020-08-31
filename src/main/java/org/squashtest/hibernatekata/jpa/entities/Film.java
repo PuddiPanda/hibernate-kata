@@ -1,5 +1,6 @@
 package org.squashtest.hibernatekata.jpa.entities;
 
+import org.hibernate.FetchMode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -31,6 +32,14 @@ public class Film {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "language_id")
+    private Language language;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "original_language_id")
+    private Language originalLanguage;
 
     public Integer getId() {
         return id;
@@ -102,5 +111,21 @@ public class Film {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public Language getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(Language originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 }

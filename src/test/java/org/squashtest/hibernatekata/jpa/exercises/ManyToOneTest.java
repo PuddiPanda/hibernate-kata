@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.squashtest.hibernatekata.jpa.dto.FilmDto;
 import org.squashtest.hibernatekata.jpa.dto.FilmProjection;
 import org.squashtest.hibernatekata.jpa.dto.FilmWithLanguageDto;
+import org.squashtest.hibernatekata.jpa.entities.Address;
 import org.squashtest.hibernatekata.jpa.entities.Film;
 import org.squashtest.hibernatekata.jpa.repository.FilmRepository;
 
@@ -66,6 +67,26 @@ public class ManyToOneTest {
                 .map(film -> new FilmWithLanguageDto(film.getId(), film.getTitle(), film.getLanguage().getName()))
                 .collect(Collectors.toList());
         assertEquals(1000, dtos.size());
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // how many request ? wtf ? what happened ?
+    // why so many request compared to film requests ?
+    // try with lazy... why it will probably not solve our problem every time ?
+    @Test
+    public void onLoadingAddressWithoutJoinFetch() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        List<Address> address = entityManager.createQuery("select a from Address a", Address.class)
+                .getResultList();
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // how many request ?
+    @Test
+    public void onLoadingAddressWithJoinFetch() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        List<Address> address = entityManager.createQuery("select a from Address a join fetch a.city c join fetch c.country", Address.class)
+                .getResultList();
         LOGGER.info("---------- END TEST -----------");
     }
 }

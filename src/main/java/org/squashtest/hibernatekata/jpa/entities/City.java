@@ -2,6 +2,7 @@ package org.squashtest.hibernatekata.jpa.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class City {
@@ -19,6 +20,9 @@ public class City {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
+
+    @OneToMany(mappedBy = "city")
+    private List<Address> addresses;
 
     public Integer getId() {
         return id;
@@ -50,5 +54,24 @@ public class City {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", country=" + country +
+                ", addresses=" + addresses +
+                '}';
     }
 }

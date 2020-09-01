@@ -1,5 +1,6 @@
 package org.squashtest.hibernatekata.jpa.exercises;
 
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class BatchModify {
     // Basic fail...
     // What about flush time ?
     @Test
-    public void batchModifyEntities() {
+    public void modifyEntities() {
         LOGGER.info("---------- BEGIN TEST -----------");
         List<Country> countries = entityManager.createQuery("select c from Country c", Country.class)
                 .getResultList();
@@ -50,7 +51,7 @@ public class BatchModify {
 
     // What about flush numbers and flush times ?
     @Test
-    public void batchModifyEntitiesAndNestedOnes() {
+    public void modifyEntitiesAndNestedOnes() {
         LOGGER.info("---------- BEGIN TEST -----------");
         List<Country> countries = entityManager.createQuery("select c from Country c", Country.class)
                 .getResultList();
@@ -63,6 +64,32 @@ public class BatchModify {
             cities.forEach(city -> city.setLastUpdate(new Date()));
         }
         entityManager.flush();
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // Fixing at least for flushes
+    // not bad but we could reduce again the flush time... how ?
+    @Test
+    public void batchModifyEntities() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        List<Integer> countryIds = entityManager.createQuery("select c.id from Country c", Integer.class)
+                .getResultList();
+        List<List<Integer>> partition = Lists.partition(countryIds, 10);
+        partition.forEach(list -> {
+            List<Country> countries = entityManager.createQuery("select c from Country c where c.id in :ids", Country.class)
+                    .setParameter("ids", list)
+                    .getResultList();
+            for (int i = 0; i < countries.size(); i++) {
+                Country country = countries.get(i);
+                country.setCountry("COUNTRY_" + i);
+                List<City> cities = entityManager.createQuery("select c from City c where c.country.id = :id", City.class)
+                        .setParameter("id", country.getId())
+                        .getResultList();
+                cities.forEach(city -> city.setLastUpdate(new Date()));
+            }
+            entityManager.flush();
+            entityManager.clear();
+        });
         LOGGER.info("---------- END TEST -----------");
     }
 }

@@ -12,6 +12,7 @@ import org.squashtest.hibernatekata.jpa.entities.Address;
 import org.squashtest.hibernatekata.jpa.entities.Film;
 import org.squashtest.hibernatekata.jpa.repository.FilmRepository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
@@ -86,6 +87,17 @@ public class ManyToOneTest {
     public void onLoadingAddressWithJoinFetch() {
         LOGGER.info("---------- BEGIN TEST -----------");
         List<Address> address = entityManager.createQuery("select a from Address a join fetch a.city c join fetch c.country", Address.class)
+                .getResultList();
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // fix with entity graph
+    @Test
+    public void onLoadingAddressWithEntityGraph() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        EntityGraph entityGraph = entityManager.getEntityGraph("address-with-cities-and-countries");
+        List<Address> address = entityManager.createQuery("select a from Address a", Address.class)
+                .setHint("javax.persistence.fetchgraph", entityGraph)
                 .getResultList();
         LOGGER.info("---------- END TEST -----------");
     }

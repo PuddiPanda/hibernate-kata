@@ -3,6 +3,21 @@ package org.squashtest.hibernatekata.jpa.entities;
 import javax.persistence.*;
 import java.util.Date;
 
+
+@NamedEntityGraph(
+        name = "address-with-cities-and-countries",
+        attributeNodes = {
+                @NamedAttributeNode(value = "city", subgraph = "city-subgraph"),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "city-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("country")
+                        }
+                )
+        }
+)
 @Entity
 public class Address {
     @Id

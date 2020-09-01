@@ -5,6 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "country-with-cities" , attributeNodes = {
+                @NamedAttributeNode("cities")
+        })
+})
 public class Country {
     @Id
     @Column(name = "country_id")

@@ -8,7 +8,12 @@ import java.util.List;
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "country-with-cities" , attributeNodes = {
                 @NamedAttributeNode("cities")
-        })
+        }),
+        @NamedEntityGraph(
+                name = "country-with-cities-with-addresses" ,
+                attributeNodes = {@NamedAttributeNode(value = "cities", subgraph = "cities-with-addresses")},
+                subgraphs = {@NamedSubgraph(name = "cities-with-addresses", attributeNodes = {@NamedAttributeNode("addresses")})}
+                )
 })
 public class Country {
     @Id

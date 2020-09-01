@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -100,6 +101,19 @@ public class OneToMany {
                 .setHint("javax.persistence.loadgraph", entityManager.getEntityGraph("country-with-cities"))
                 .getResultList();
         countries.forEach(country -> country.getCities().forEach(city -> LOGGER.info(city.getCity())));
+        LOGGER.info("---------- END TEST -----------");
+    }
+
+    // Why it doesn't work ? How to fix that ?
+    @Test
+    public void requestAllAddressFromAllCountriesWithEntityGraph() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        assertThrows(IllegalArgumentException.class, () -> {
+            List<Country> countries = entityManager.createQuery("select c from Country c", Country.class)
+                    .setHint("javax.persistence.loadgraph", entityManager.getEntityGraph("country-with-cities-with-addresses"))
+                    .getResultList();
+            countries.forEach(country -> country.getCities().forEach(city -> LOGGER.info(city.toString())));
+        });
         LOGGER.info("---------- END TEST -----------");
     }
 

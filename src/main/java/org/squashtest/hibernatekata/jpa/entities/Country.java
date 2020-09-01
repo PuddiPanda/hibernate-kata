@@ -3,6 +3,7 @@ package org.squashtest.hibernatekata.jpa.entities;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NamedEntityGraphs({
@@ -27,7 +28,7 @@ public class Country {
     private Date lastUpdate;
 
     @OneToMany(mappedBy = "country")
-    private List<City> cities;
+    private Set<City> cities;
 
     public Integer getId() {
         return id;
@@ -53,11 +54,11 @@ public class Country {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<City> getCities() {
+    public Set<City> getCities() {
         return cities;
     }
 
-    public void setCities(List<City> cities) {
+    public void setCities(Set<City> cities) {
         this.cities = cities;
     }
 }

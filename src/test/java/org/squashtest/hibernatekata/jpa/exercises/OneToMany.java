@@ -104,16 +104,14 @@ public class OneToMany {
         LOGGER.info("---------- END TEST -----------");
     }
 
-    // Why it doesn't work ? How to fix that ?
+    // Fixed with correct collection semantic
     @Test
     public void requestAllAddressFromAllCountriesWithEntityGraph() {
         LOGGER.info("---------- BEGIN TEST -----------");
-        assertThrows(IllegalArgumentException.class, () -> {
-            List<Country> countries = entityManager.createQuery("select c from Country c", Country.class)
-                    .setHint("javax.persistence.loadgraph", entityManager.getEntityGraph("country-with-cities-with-addresses"))
-                    .getResultList();
-            countries.forEach(country -> country.getCities().forEach(city -> LOGGER.info(city.toString())));
-        });
+        List<Country> countries = entityManager.createQuery("select c from Country c", Country.class)
+                .setHint("javax.persistence.loadgraph", entityManager.getEntityGraph("country-with-cities-with-addresses"))
+                .getResultList();
+        countries.forEach(country -> country.getCities().forEach(city -> LOGGER.info(city.toString())));
         LOGGER.info("---------- END TEST -----------");
     }
 

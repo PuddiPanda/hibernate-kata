@@ -3,6 +3,7 @@ package org.squashtest.hibernatekata.jpa.entities;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class City {
@@ -22,7 +23,7 @@ public class City {
     private Country country;
 
     @OneToMany(mappedBy = "city")
-    private List<Address> addresses;
+    private Set<Address> addresses;
 
     public Integer getId() {
         return id;
@@ -56,11 +57,11 @@ public class City {
         this.country = country;
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 

@@ -92,4 +92,31 @@ public class BatchModify {
         });
         LOGGER.info("---------- END TEST -----------");
     }
+
+    // better...
+    @Test
+    public void batchModifyEntitiesWithPreload() {
+        LOGGER.info("---------- BEGIN TEST -----------");
+        List<Integer> countryIds = entityManager.createQuery("select c.id from Country c", Integer.class)
+                .getResultList();
+        List<List<Integer>> partition = Lists.partition(countryIds, 10);
+        partition.forEach(list -> {
+            List<Country> countries = entityManager.createQuery("select c from Country c where c.id in :ids", Country.class)
+                    .setParameter("ids", list)
+                    .getResultList();
+
+            entityManager.createQuery("select c from City c where c.country.id in :ids", City.class)
+                    .setParameter("ids", list)
+                    .getResultList();
+
+            for (int i = 0; i < countries.size(); i++) {
+                Country country = countries.get(i);
+                country.setCountry("COUNTRY_" + i);
+                country.getCities().forEach(city -> city.setLastUpdate(new Date()));
+            }
+            entityManager.flush();
+            entityManager.clear();
+        });
+        LOGGER.info("---------- END TEST -----------");
+    }
 }

@@ -8,7 +8,8 @@ public class Language {
 
     @Id
     @Column(name = "language_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "language_language_id_seq")
+    @SequenceGenerator(name = "language_language_id_seq", sequenceName = "language_language_id_seq", allocationSize = 1)
     private Integer id;
 
     private String name;

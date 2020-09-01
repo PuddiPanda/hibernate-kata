@@ -19,7 +19,8 @@ import java.util.Set;
 public class Country {
     @Id
     @Column(name = "country_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "country_country_id_seq")
+    @SequenceGenerator(name = "country_country_id_seq", sequenceName = "country_country_id_seq", allocationSize = 1)
     private Integer id;
 
     private String country;

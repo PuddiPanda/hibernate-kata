@@ -10,7 +10,8 @@ public class City {
 
     @Id
     @Column(name = "city_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "city_city_id_seq")
+    @SequenceGenerator(name = "city_city_id_seq", sequenceName = "city_city_id_seq", allocationSize = 1)
     private Integer id;
 
     private String city;

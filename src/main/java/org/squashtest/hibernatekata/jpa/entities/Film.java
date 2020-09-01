@@ -11,7 +11,8 @@ public class Film {
 
     @Id
     @Column(name = "film_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "film_film_id_seq")
+    @SequenceGenerator(name = "film_film_id_seq", sequenceName = "film_film_id_seq", allocationSize = 1)
     private Integer id;
 
     private String title;

@@ -7,7 +7,8 @@ public class Actor {
 
     @Id
     @Column(name = "actor_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "actor_actor_id_seq")
+    @SequenceGenerator(name = "actor_actor_id_seq", sequenceName = "actor_actor_id_seq", allocationSize = 1)
     private Integer id;
 
     private String firstName;
